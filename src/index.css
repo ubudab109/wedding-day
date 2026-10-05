@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@theme {
+  --font-script: "Great Vibes", cursive;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Jost", ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: "Amiri", "Traditional Arabic", serif;
+  --font-calligraphy: "Aref Ruqaa", "Amiri", serif;
+
+  --color-cream: #fbf6ec;
+  --color-ivory: #fffdf7;
+
+  --color-gold-200: #f3e7c4;
+  --color-gold-300: #ead7a1;
+  --color-gold-400: #dcbf73;
+  --color-gold-500: #c9a24a;
+  --color-gold-600: #a8822f;
+  --color-gold-700: #7f6122;
+
+  --color-burgundy-50: #fbf1f2;
+  --color-burgundy-100: #f5dde0;
+  --color-burgundy-200: #e9b7bd;
+  --color-burgundy-300: #d68891;
+  --color-burgundy-400: #b95564;
+  --color-burgundy-500: #9c3445;
+  --color-burgundy-600: #862637;
+  --color-burgundy-700: #721e2e;
+  --color-burgundy-800: #5c1825;
+  --color-burgundy-900: #45111b;
+  --color-burgundy-950: #2b0910;
+
+  --animate-sway: sway 5s ease-in-out infinite;
+  --animate-sway-slow: sway 8s ease-in-out infinite;
+  --animate-ondel: ondel 2.6s ease-in-out infinite;
+  --animate-bob: bob 1.3s ease-in-out infinite;
+  --animate-spin-slow: spin 6s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-shimmer: shimmer 3.5s linear infinite;
+  --animate-twinkle: twinkle 2.4s ease-in-out infinite;
+}
+
+/* Global so inline-style animations (SVG puppets, petals) can use them too. */
+@keyframes sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+@keyframes ondel {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(4deg); }
+}
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to { background-position: 200% center; }
+}
+@keyframes petal-fall {
+  0% { transform: translate3d(0, -10vh, 0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translate3d(var(--drift, 40px), 110vh, 0) rotate(var(--spin, 360deg)); opacity: 0; }
+}
+@keyframes petal-sway {
+  0%, 100% { margin-left: 0; }
+  50% { margin-left: 28px; }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-cream font-sans text-emerald-950 antialiased;
+    overflow-x: hidden;
+  }
+  ::selection {
+    @apply bg-gold-300 text-burgundy-900;
+  }
+}
+
+@layer components {
+  /* Subtle Islamic 8‑point star lattice. */
+  .bg-islamic {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23c9a24a' stroke-opacity='.16' stroke-width='1'%3E%3Crect x='17' y='17' width='30' height='30'/%3E%3Crect x='17' y='17' width='30' height='30' transform='rotate(45 32 32)'/%3E%3Ccircle cx='32' cy='32' r='6'/%3E%3Cpath d='M0 0l17 17M64 0L47 17M0 64l17-17M64 64L47 47'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 64px 64px;
+  }
+  .bg-islamic-dark {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23064e3b' stroke-opacity='.08' stroke-width='1'%3E%3Crect x='17' y='17' width='30' height='30'/%3E%3Crect x='17' y='17' width='30' height='30' transform='rotate(45 32 32)'/%3E%3Ccircle cx='32' cy='32' r='6'/%3E%3Cpath d='M0 0l17 17M64 0L47 17M0 64l17-17M64 64L47 47'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 64px 64px;
+  }
+  .text-gold-gradient {
+    background: linear-gradient(100deg, #a8822f 0%, #f3e7c4 25%, #c9a24a 50%, #f3e7c4 75%, #a8822f 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 6s linear infinite;
+  }
+  .card-glass {
+    @apply rounded-3xl border border-gold-400/30 bg-white/70 shadow-[0_20px_50px_-20px_rgba(6,78,59,0.35)] backdrop-blur-md;
+  }
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-linear-to-r from-gold-600 via-gold-400 to-gold-600 px-6 py-3 text-sm font-medium tracking-wide text-emerald-950 shadow-lg shadow-gold-700/30 transition hover:brightness-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-current px-5 py-2.5 text-sm font-medium tracking-wide transition hover:bg-current/10 active:scale-95;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
