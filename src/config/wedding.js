@@ -42,7 +42,7 @@ export const wedding = {
       title: 'Resepsi',
       arabic: 'وَلِيمَةُ العُرْس',
       date: 'Sabtu, 07 November 2026',
-      time: '11.00 – 14.00 WIB',
+      time: '11.00 WIB – Selesai',
       start: '20261107T040000Z',
       end: '20261107T070000Z',
     },
