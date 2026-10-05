@@ -66,12 +66,15 @@ function BankCard({ gift, index }) {
       viewport={viewport}
       whileHover={{ rotateX: 6, rotateY: index % 2 ? -6 : 6, scale: 1.02 }}
       style={{ transformPerspective: 900 }}
-      className="relative aspect-[1.586] w-full max-w-sm overflow-hidden rounded-3xl bg-linear-to-br from-emerald-800 via-emerald-900 to-emerald-950 p-6 text-cream shadow-2xl shadow-emerald-950/40"
+      // No overflow-hidden here: with it, aspect-ratio can't grow to fit taller text (iOS Safari
+      // renders the mono digits wider / honours text-size settings), which clipped the bottom row.
+      className="relative flex aspect-[1.586] w-full max-w-sm flex-col justify-between gap-4 rounded-3xl bg-linear-to-br from-emerald-800 via-emerald-900 to-emerald-950 p-5 text-cream shadow-2xl shadow-emerald-950/40 sm:p-6"
     >
-      <div className="absolute inset-0 bg-islamic opacity-70" />
-      <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gold-400/15 blur-2xl" />
-      <div className="relative flex h-full flex-col justify-between">
-        <div className="flex items-start justify-between">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl">
+        <div className="absolute inset-0 bg-islamic opacity-70" />
+        <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gold-400/15 blur-2xl" />
+      </div>
+      <div className="relative flex items-start justify-between">
           <div>
             <p className="font-display text-3xl font-bold italic tracking-wide text-gold-200">{gift.bank}</p>
             <p className="text-[10px] uppercase tracking-[0.25em] text-cream/60">{gift.bankName}</p>
@@ -79,13 +82,14 @@ function BankCard({ gift, index }) {
           <div className="h-9 w-12 rounded-md bg-linear-to-br from-gold-300 to-gold-600 shadow-inner" aria-hidden="true">
             <div className="mx-auto mt-2 h-5 w-8 rounded-sm border border-gold-700/40" />
           </div>
-        </div>
-        <div>
-          <p className="font-mono text-xl tracking-[0.15em] sm:text-2xl">{groupDigits(gift.number)}</p>
-          <div className="mt-2 flex items-end justify-between gap-3">
-            <p className="text-sm font-medium uppercase tracking-wider text-cream/90">a.n. {gift.holder}</p>
-            <CopyButton text={gift.number} label={`Salin nomor rekening ${gift.holder}`} />
-          </div>
+      </div>
+      <div className="relative">
+        <p className="whitespace-nowrap font-mono text-xl tracking-[0.12em] sm:text-2xl">{groupDigits(gift.number)}</p>
+        <div className="mt-2 flex items-end justify-between gap-3">
+          <p className="min-w-0 text-sm font-medium uppercase leading-snug tracking-wider text-cream/90">
+            a.n. {gift.holder}
+          </p>
+          <CopyButton text={gift.number} label={`Salin nomor rekening ${gift.holder}`} />
         </div>
       </div>
     </motion.div>
