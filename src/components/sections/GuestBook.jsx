@@ -4,6 +4,7 @@ import { fetchWishes, postWish } from '../../lib/guestbook';
 import { initials, timeAgo } from '../../lib/format';
 import { fadeUp, viewport } from '../../lib/motion';
 import SectionTitle from '../SectionTitle';
+import Wave from '../ornaments/Wave';
 import { IconSend } from '../Icons';
 
 const ATTENDANCE = [
@@ -12,9 +13,9 @@ const ATTENDANCE = [
   { value: 'tidak', label: 'Berhalangan', emoji: '🙏' },
 ];
 const BADGE = {
-  hadir: 'bg-emerald-100 text-emerald-800',
-  ragu: 'bg-gold-200 text-gold-700',
-  tidak: 'bg-burgundy-100 text-burgundy-700',
+  hadir: 'bg-matcha-100 text-matcha-700',
+  ragu: 'bg-amber-100 text-amber-800',
+  tidak: 'bg-berry-100 text-berry-700',
 };
 const PAGE = 6;
 
@@ -69,8 +70,8 @@ export default function GuestBook({ guest }) {
   return (
     <section
       id="ucapan"
-      data-buddy="Tulis doa yang paling bagus ye, aye bacain nanti!"
-      className="relative overflow-hidden bg-cream bg-islamic-dark px-5 py-20 sm:py-28"
+      data-buddy="Tulis doa terbaikmu ya, nanti aku bacakan!"
+      className="relative overflow-hidden bg-milk bg-islamic-matcha px-5 pb-28 pt-16 sm:pb-36 sm:pt-24"
     >
       <SectionTitle arabic="دُعَاء" eyebrow="Buku Tamu" title="Doa & Ucapan" />
 
@@ -81,11 +82,11 @@ export default function GuestBook({ guest }) {
           whileInView="show"
           viewport={viewport}
           onSubmit={onSubmit}
-          className="card-glass h-fit space-y-5 p-6 sm:p-8"
+          className="card-soft h-fit space-y-5 p-6 sm:p-8"
           noValidate
         >
           <div>
-            <label htmlFor="gb-name" className="mb-1.5 block text-sm font-medium text-emerald-900">
+            <label htmlFor="gb-name" className="mb-1.5 block text-sm font-medium text-matcha-800">
               Nama
             </label>
             <input
@@ -96,12 +97,12 @@ export default function GuestBook({ guest }) {
               required
               autoComplete="name"
               placeholder="Nama Anda"
-              className="w-full rounded-xl border border-emerald-900/15 bg-white/80 px-4 py-3 text-sm outline-none transition focus:border-gold-500 focus:ring-4 focus:ring-gold-300/40"
+              className="w-full rounded-xl border border-matcha-200 bg-white/80 px-4 py-3 text-sm outline-none transition focus:border-berry-300 focus:ring-4 focus:ring-berry-200/50"
             />
           </div>
 
           <fieldset>
-            <legend className="mb-1.5 block text-sm font-medium text-emerald-900">Konfirmasi Kehadiran</legend>
+            <legend className="mb-1.5 block text-sm font-medium text-matcha-800">Konfirmasi Kehadiran</legend>
             <div className="grid grid-cols-3 gap-2">
               {ATTENDANCE.map((a) => {
                 const active = form.attendance === a.value;
@@ -110,8 +111,8 @@ export default function GuestBook({ guest }) {
                     key={a.value}
                     className={`relative cursor-pointer rounded-xl border px-2 py-3 text-center text-xs font-medium transition ${
                       active
-                        ? 'border-burgundy-600 bg-burgundy-700 text-cream shadow-md'
-                        : 'border-emerald-900/15 bg-white/70 text-emerald-900 hover:border-gold-500'
+                        ? 'border-berry-500 bg-berry-500 text-milk shadow-md shadow-berry-500/30'
+                        : 'border-matcha-200 bg-white/70 text-matcha-800 hover:border-berry-300'
                     }`}
                   >
                     <input
@@ -137,7 +138,7 @@ export default function GuestBook({ guest }) {
           </fieldset>
 
           <div>
-            <label htmlFor="gb-message" className="mb-1.5 block text-sm font-medium text-emerald-900">
+            <label htmlFor="gb-message" className="mb-1.5 block text-sm font-medium text-matcha-800">
               Doa & Ucapan
             </label>
             <textarea
@@ -148,12 +149,12 @@ export default function GuestBook({ guest }) {
               maxLength={500}
               required
               placeholder="Tuliskan doa terbaik untuk kedua mempelai…"
-              className="w-full resize-none rounded-xl border border-emerald-900/15 bg-white/80 px-4 py-3 text-sm outline-none transition focus:border-gold-500 focus:ring-4 focus:ring-gold-300/40"
+              className="w-full resize-none rounded-xl border border-matcha-200 bg-white/80 px-4 py-3 text-sm outline-none transition focus:border-berry-300 focus:ring-4 focus:ring-berry-200/50"
             />
-            <p className="mt-1 text-right text-[11px] text-emerald-900/50">{form.message.length}/500</p>
+            <p className="mt-1 text-right text-[11px] text-matcha-900/50">{form.message.length}/500</p>
           </div>
 
-          <button type="submit" disabled={status.type === 'loading'} className="btn-gold w-full disabled:opacity-60">
+          <button type="submit" disabled={status.type === 'loading'} className="btn-berry w-full disabled:opacity-60">
             <IconSend className="h-4 w-4" />
             {status.type === 'loading' ? 'Mengirim…' : 'Kirim Ucapan'}
           </button>
@@ -166,7 +167,7 @@ export default function GuestBook({ guest }) {
                 initial={{ opacity: 0, y: -6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className={`text-center text-sm ${status.type === 'error' ? 'text-burgundy-600' : 'text-emerald-700'}`}
+                className={`text-center text-sm ${status.type === 'error' ? 'text-berry-600' : 'text-matcha-700'}`}
               >
                 {status.text}
               </motion.p>
@@ -177,18 +178,18 @@ export default function GuestBook({ guest }) {
         <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={viewport}>
           <div className="mb-4 grid grid-cols-3 gap-2">
             {stats.map((s) => (
-              <div key={s.value} className="rounded-2xl bg-emerald-900 px-2 py-3 text-center text-cream">
-                <p className="font-display text-2xl font-semibold lining-nums text-gold-300">{s.count}</p>
-                <p className="text-[11px] uppercase tracking-wider text-cream/70">{s.label}</p>
+              <div key={s.value} className="rounded-2xl bg-linear-to-b from-matcha-500 to-matcha-700 px-2 py-3 text-center text-milk shadow-md shadow-matcha-900/20">
+                <p className="font-display text-2xl font-semibold lining-nums text-milk">{s.count}</p>
+                <p className="text-[11px] uppercase tracking-wider text-matcha-100">{s.label}</p>
               </div>
             ))}
           </div>
 
-          <div className="card-glass max-h-[34rem] overflow-y-auto p-4 sm:p-5">
+          <div className="card-soft max-h-[34rem] overflow-y-auto p-4 sm:p-5">
             {loading ? (
-              <p className="py-10 text-center text-sm text-emerald-900/60">Memuat ucapan…</p>
+              <p className="py-10 text-center text-sm text-matcha-900/60">Memuat ucapan…</p>
             ) : wishes.length === 0 ? (
-              <p className="py-10 text-center font-display text-lg italic text-emerald-900/70">
+              <p className="py-10 text-center font-display text-lg italic text-matcha-900/70">
                 Belum ada ucapan. Jadilah yang pertama mendoakan kami 🤍
               </p>
             ) : (
@@ -203,20 +204,20 @@ export default function GuestBook({ guest }) {
                       transition={{ type: 'spring', stiffness: 300, damping: 22 }}
                       className="flex gap-3 rounded-2xl bg-white/80 p-4 shadow-sm"
                     >
-                      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-linear-to-br from-burgundy-600 to-burgundy-800 text-sm font-semibold text-gold-200">
+                      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-linear-to-br from-berry-300 to-berry-600 text-sm font-semibold text-milk">
                         {initials(w.name)}
                       </span>
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
-                          <p className="truncate font-semibold text-emerald-900">{w.name}</p>
+                          <p className="truncate font-semibold text-matcha-800">{w.name}</p>
                           <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${BADGE[w.attendance] ?? BADGE.ragu}`}>
                             {ATTENDANCE.find((a) => a.value === w.attendance)?.label ?? 'Masih Ragu'}
                           </span>
                         </div>
-                        <p className="mt-1 whitespace-pre-line break-words text-sm leading-relaxed text-emerald-950/80">
+                        <p className="mt-1 whitespace-pre-line break-words text-sm leading-relaxed text-matcha-900/80">
                           {w.message}
                         </p>
-                        <p className="mt-1.5 text-[11px] text-emerald-900/50">{timeAgo(w.createdAt)}</p>
+                        <p className="mt-1.5 text-[11px] text-matcha-900/50">{timeAgo(w.createdAt)}</p>
                       </div>
                     </motion.li>
                   ))}
@@ -227,7 +228,7 @@ export default function GuestBook({ guest }) {
               <button
                 type="button"
                 onClick={() => setShown((n) => n + PAGE)}
-                className="btn-outline mx-auto mt-4 flex text-emerald-800"
+                className="btn-outline mx-auto mt-4 flex text-matcha-700"
               >
                 Lihat lebih banyak
               </button>
@@ -235,6 +236,8 @@ export default function GuestBook({ guest }) {
           </div>
         </motion.div>
       </div>
+
+      <Wave className="text-matcha-900" />
     </section>
   );
 }

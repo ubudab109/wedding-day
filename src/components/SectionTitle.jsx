@@ -16,7 +16,7 @@ export default function SectionTitle({ arabic, eyebrow, title, light = false, cl
           variants={dropIn}
           lang="ar"
           dir="rtl"
-          className={`font-calligraphy text-3xl sm:text-4xl ${light ? 'text-gold-300' : 'text-gold-600'}`}
+          className={`font-calligraphy text-3xl sm:text-4xl ${light ? 'text-berry-200' : 'text-berry-500'}`}
         >
           {arabic}
         </motion.p>
@@ -24,14 +24,14 @@ export default function SectionTitle({ arabic, eyebrow, title, light = false, cl
       {eyebrow && (
         <motion.p
           variants={fadeUp}
-          className={`mt-2 text-xs font-medium uppercase tracking-[0.35em] ${light ? 'text-gold-200/80' : 'text-burgundy-600'}`}
+          className={`mt-3 text-[11px] font-semibold uppercase tracking-[0.35em] ${light ? 'text-matcha-200' : 'text-matcha-600'}`}
         >
           {eyebrow}
         </motion.p>
       )}
       <motion.h2
         variants={fadeUp}
-        className={`mt-2 font-script text-5xl leading-tight sm:text-6xl ${light ? 'text-cream' : 'text-emerald-900'}`}
+        className={`mt-2 font-script text-5xl leading-tight sm:text-6xl ${light ? 'text-milk' : 'text-matcha-800'}`}
       >
         {title}
       </motion.h2>

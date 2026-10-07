@@ -1,18 +1,17 @@
 # Overview
-Create website landing for wedding invitation with Indonesian culture from Jakarta (Betawi). Include sections: Islamic theme, prayer messages, about us, wedding story, schedule, and guest book. Use Tailwind CSS and React. Deployment to Vercel.
+Create website landing for wedding invitation with Strawberry & Matcha colors. Include sections: Islamic theme, prayer messages, about us, wedding story, schedule, and guest book. Use Tailwind CSS and React. Deployment to Vercel.
 
 # Website Overview
-- Use Emerald & Burgundy colors
-- Use modern design with Indonesian culture from Jakarta (Betawi)
+- Use Strawberry & Matcha colors
+- Use modern design
 - Use Arabic calligraphy elements
 - Use Islamic theme
-- Use modern design with Indonesian culture from Jakarta (Betawi)
 - Name for couple: Muhammad Rizky Firdaus & Lanina Indah Setyani
 - Date of wedding: 07 November 2026
 - Name for people that have been invited that get from parameters `?to=xxx+Dan+Yy`
 - Use font style similar to https://www.instagram.com/p/C_B-rD5yB_1/ for names.
-- Add music instrument using "you're still the one" instrument sound (instrument only, no vocal)
-- Add animated "Ondel-ondel" element on the website.
+- Add music instrument using from `public\music\song.mp3`
+- Add animated element that suit with strawberry & matcha colors
 - Add flowers element with animation
 - Add funny and proper animation when scrolling
 - Use song `public\music\song.mp3`

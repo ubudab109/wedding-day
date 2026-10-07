@@ -7,7 +7,7 @@ export const wedding = {
       nickname: 'Rizky',
       fullName: 'Muhammad Rizky Firdaus',
       role: 'Mempelai Pria',
-      parents: 'Putra Kedua dari Bpk. Suryadi & Ibu Patimah',
+      parents: 'Putra Pertama dari Bpk. Suryadi & Ibu Patimah',
       description:
         'Sosok penyayang, tangguh, dan penuh kasih yang siap mengarungi bahtera kehidupan bersama.',
       instagram: 'rizkyfirdaus0309',

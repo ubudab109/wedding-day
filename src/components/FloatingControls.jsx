@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useScrollDirection } from '../hooks/useScrollDirection';
 import { IconArrowUp, IconPause, IconPlay } from './Icons';
+import Strawberry from './ornaments/Strawberry';
 
 // Spinning music disc + back-to-top. Both hide while scrolling down and come back on scroll up.
 export default function FloatingControls({ music, track }) {
@@ -23,7 +24,7 @@ export default function FloatingControls({ music, track }) {
             whileHover={{ y: -3 }}
             whileTap={{ scale: 0.9 }}
             transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-            className="grid h-11 w-11 place-items-center rounded-full border border-gold-400/60 bg-emerald-900/90 text-gold-300 shadow-lg backdrop-blur"
+            className="grid h-11 w-11 place-items-center rounded-full border border-white/60 bg-matcha-700/90 text-milk shadow-lg shadow-matcha-950/30 backdrop-blur"
           >
             <IconArrowUp />
           </motion.button>
@@ -39,26 +40,26 @@ export default function FloatingControls({ music, track }) {
         animate={visible ? { opacity: 1, x: 0, rotate: 0 } : { opacity: 0, x: 90, rotate: 90 }}
         transition={{ type: 'spring', stiffness: 260, damping: 22 }}
         style={{ pointerEvents: visible ? 'auto' : 'none' }}
-        className="group relative h-14 w-14 rounded-full shadow-xl shadow-emerald-950/40"
+        className="group relative h-14 w-14 rounded-full shadow-xl shadow-matcha-950/40"
       >
         <span
-          className="absolute inset-0 rounded-full bg-[repeating-radial-gradient(circle,#111_0_2px,#1f1f1f_2px_4px)] ring-2 ring-gold-500"
+          className="absolute inset-0 rounded-full bg-[repeating-radial-gradient(circle,#1d2419_0_2px,#2c3626_2px_4px)] ring-2 ring-berry-300"
           style={{ animation: 'spin 4s linear infinite', animationPlayState: music.playing ? 'running' : 'paused' }}
         >
-          <span className="absolute inset-[30%] grid place-items-center rounded-full bg-linear-to-br from-burgundy-600 to-burgundy-800 ring-1 ring-gold-400">
-            <span className="h-1.5 w-1.5 rounded-full bg-cream" />
+          <span className="absolute inset-[28%] grid place-items-center rounded-full bg-linear-to-br from-berry-300 to-berry-500 ring-1 ring-white/60">
+            <Strawberry className="h-4 w-4" body="#fffaf3" shade="#ffc7d0" />
           </span>
           <span className="absolute left-[18%] top-[14%] h-2 w-4 rotate-[-35deg] rounded-full bg-white/15 blur-[1px]" />
         </span>
-        <span className="absolute -left-1 -top-1 grid h-6 w-6 place-items-center rounded-full bg-gold-500 text-emerald-950 shadow">
+        <span className="absolute -left-1 -top-1 grid h-6 w-6 place-items-center rounded-full bg-matcha-500 text-milk shadow ring-2 ring-milk">
           {music.playing ? <IconPause className="h-3 w-3" /> : <IconPlay className="h-3 w-3" />}
         </span>
         {music.playing && (
           <span aria-hidden="true" className="absolute -right-1 -top-3 flex items-end gap-0.5">
-            {[0, 0.2, 0.4].map((d) => (
+            {[0, 0.2, 0.4].map((d, i) => (
               <span
                 key={d}
-                className="w-1 rounded-full bg-gold-400"
+                className={`w-1 rounded-full ${i === 1 ? 'bg-matcha-400' : 'bg-berry-400'}`}
                 style={{ height: 10, animation: `bob 0.8s ease-in-out ${d}s infinite` }}
               />
             ))}

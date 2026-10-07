@@ -2,7 +2,9 @@ import { motion } from 'framer-motion';
 import { wedding } from '../../config/wedding';
 import { fadeUp, popIn, stagger, viewport } from '../../lib/motion';
 import SectionTitle from '../SectionTitle';
-import GigiBalang from '../ornaments/GigiBalang';
+import IslamicStar from '../ornaments/IslamicStar';
+import Wave from '../ornaments/Wave';
+import { Blossom, Leaf } from '../ornaments/Flowers';
 import { IconCalendar, IconClock, IconPin } from '../Icons';
 
 export default function Schedule() {
@@ -15,42 +17,47 @@ export default function Schedule() {
   return (
     <section
       id="acara"
-      data-buddy="Catet tanggalnye! Jangan sampe kelewatan ye!"
-      className="relative overflow-hidden bg-emerald-950 bg-islamic text-cream"
+      data-buddy="Catat tanggalnya ya, jangan sampai kelewatan!"
+      className="relative overflow-hidden bg-matcha-100 bg-islamic-matcha px-5 pb-28 pt-16 sm:pb-36 sm:pt-24"
     >
-      <GigiBalang />
-      <div className="mx-auto max-w-5xl px-5 py-20 sm:py-28">
-        <SectionTitle arabic="المَوْعِد" eyebrow="Waktu & Tempat" title="Rangkaian Acara" light />
+      <div className="mx-auto max-w-5xl">
+        <SectionTitle arabic="المَوْعِد" eyebrow="Waktu & Tempat" title="Rangkaian Acara" />
 
         <motion.div
           variants={stagger(0.18)}
           initial="hidden"
           whileInView="show"
           viewport={viewport}
-          className="grid gap-6 md:grid-cols-2"
+          className="grid gap-8 md:grid-cols-2"
         >
-          {events.map((ev) => (
+          {events.map((ev, i) => (
             <motion.article
               key={ev.title}
               variants={popIn}
               whileHover={{ y: -6 }}
-              className="relative overflow-hidden rounded-t-[10rem] rounded-b-3xl border border-gold-400/40 bg-linear-to-b from-burgundy-800 to-burgundy-950 px-6 pb-8 pt-14 text-center shadow-2xl shadow-black/30"
+              className={`relative overflow-hidden rounded-t-[10rem] rounded-b-[2rem] bg-linear-to-b px-6 pb-9 pt-16 text-center text-milk shadow-2xl ${
+                i % 2 ? 'from-matcha-500 to-matcha-800 shadow-matcha-900/30' : 'from-berry-400 to-berry-700 shadow-berry-800/30'
+              }`}
             >
-              <div className="pointer-events-none absolute inset-2 rounded-t-[10rem] rounded-b-2xl border border-gold-400/25" />
-              <p lang="ar" dir="rtl" className="font-calligraphy text-3xl text-gold-300">
+              <div className="pointer-events-none absolute inset-2.5 rounded-t-[10rem] rounded-b-[1.6rem] border border-white/30" />
+              <div className="pointer-events-none absolute inset-0 bg-islamic opacity-60" />
+              <IslamicStar className="absolute left-1/2 top-4 h-10 w-10 -translate-x-1/2 text-white/60">
+                <span className="block h-1.5 w-1.5 rounded-full bg-white/80" />
+              </IslamicStar>
+              <p lang="ar" dir="rtl" className="relative font-calligraphy text-3xl text-white/90">
                 {ev.arabic}
               </p>
-              <h3 className="mt-1 font-script text-5xl text-cream">{ev.title}</h3>
-              <ul className="mt-6 space-y-3 text-sm text-cream/90">
-                <li className="flex items-center justify-center gap-2">
-                  <IconCalendar className="h-4 w-4 text-gold-300" /> {ev.date}
-                </li>
-                <li className="flex items-center justify-center gap-2">
-                  <IconClock className="h-4 w-4 text-gold-300" /> {ev.time}
-                </li>
-                <li className="flex items-center justify-center gap-2">
-                  <IconPin className="h-4 w-4 text-gold-300" /> {venue.name}, {venue.city}
-                </li>
+              <h3 className="relative mt-1 font-script text-5xl">{ev.title}</h3>
+              <ul className="relative mx-auto mt-6 max-w-xs space-y-2.5 text-sm">
+                {[
+                  [IconCalendar, ev.date],
+                  [IconClock, ev.time],
+                  [IconPin, `${venue.name}, ${venue.city}`],
+                ].map(([Icon, text]) => (
+                  <li key={text} className="flex items-center justify-center gap-2 rounded-full bg-white/15 px-4 py-2 backdrop-blur-sm">
+                    <Icon className="h-4 w-4 shrink-0" /> {text}
+                  </li>
+                ))}
               </ul>
             </motion.article>
           ))}
@@ -61,18 +68,20 @@ export default function Schedule() {
           initial="hidden"
           whileInView="show"
           viewport={viewport}
-          className="mt-12 overflow-hidden rounded-3xl border border-gold-400/40 bg-emerald-900/50 shadow-2xl"
+          className="card-soft relative mt-12 overflow-hidden"
         >
+          <Blossom className="absolute -right-3 -top-3 h-14 w-14 animate-float" />
+          <Leaf className="absolute right-10 top-3 h-5 w-9 rotate-12 animate-sway" />
           <div className="flex flex-col items-center justify-between gap-4 px-6 py-5 sm:flex-row">
             <div className="text-center sm:text-left">
-              <p className="font-display text-2xl font-semibold text-gold-200">{venue.name}</p>
-              <p className="text-sm text-cream/70">{venue.city}</p>
+              <p className="font-display text-2xl font-semibold text-matcha-800">{venue.name}</p>
+              <p className="text-sm text-matcha-900/60">{venue.city}</p>
             </div>
             <div className="flex flex-wrap justify-center gap-3">
-              <a href={mapsUrl} target="_blank" rel="noreferrer" className="btn-outline text-gold-200">
+              <a href={mapsUrl} target="_blank" rel="noreferrer" className="btn-outline text-matcha-700">
                 <IconPin className="h-4 w-4" /> Buka Maps
               </a>
-              <a href={directionsUrl} target="_blank" rel="noreferrer" className="btn-gold py-2.5">
+              <a href={directionsUrl} target="_blank" rel="noreferrer" className="btn-berry py-2.5">
                 Petunjuk Arah
               </a>
             </div>
@@ -82,12 +91,13 @@ export default function Schedule() {
             src={embedUrl}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            className="block h-72 w-full border-0 grayscale-[30%] sm:h-96"
+            className="block h-72 w-full border-0 sm:h-96"
             allowFullScreen
           />
         </motion.div>
       </div>
-      <GigiBalang flip />
+
+      <Wave className="text-berry-700" />
     </section>
   );
 }

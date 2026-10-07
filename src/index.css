@@ -2,51 +2,56 @@
 
 @theme {
   --font-script: "Great Vibes", cursive;
-  --font-display: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "Jost", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-arabic: "Amiri", "Traditional Arabic", serif;
   --font-calligraphy: "Aref Ruqaa", "Amiri", serif;
 
-  --color-cream: #fbf6ec;
-  --color-ivory: #fffdf7;
+  /* Steamed milk — the base layer of a strawberry matcha latte. */
+  --color-milk: #fffaf3;
+  --color-foam: #fdf3e7;
+  --color-seed: #f6d27c;
 
-  --color-gold-200: #f3e7c4;
-  --color-gold-300: #ead7a1;
-  --color-gold-400: #dcbf73;
-  --color-gold-500: #c9a24a;
-  --color-gold-600: #a8822f;
-  --color-gold-700: #7f6122;
+  --color-matcha-50: #f4f8ee;
+  --color-matcha-100: #e6efd8;
+  --color-matcha-200: #cddcb4;
+  --color-matcha-300: #aec58a;
+  --color-matcha-400: #8daa64;
+  --color-matcha-500: #6f8f4a;
+  --color-matcha-600: #57733a;
+  --color-matcha-700: #455b30;
+  --color-matcha-800: #354629;
+  --color-matcha-900: #283621;
+  --color-matcha-950: #182114;
 
-  --color-burgundy-50: #fbf1f2;
-  --color-burgundy-100: #f5dde0;
-  --color-burgundy-200: #e9b7bd;
-  --color-burgundy-300: #d68891;
-  --color-burgundy-400: #b95564;
-  --color-burgundy-500: #9c3445;
-  --color-burgundy-600: #862637;
-  --color-burgundy-700: #721e2e;
-  --color-burgundy-800: #5c1825;
-  --color-burgundy-900: #45111b;
-  --color-burgundy-950: #2b0910;
+  --color-berry-50: #fff3f4;
+  --color-berry-100: #ffe3e7;
+  --color-berry-200: #ffc7d0;
+  --color-berry-300: #ff9cac;
+  --color-berry-400: #f76d83;
+  --color-berry-500: #e8455f;
+  --color-berry-600: #cc2b48;
+  --color-berry-700: #a8203b;
+  --color-berry-800: #8a1d35;
+  --color-berry-900: #6f1a2e;
 
   --animate-sway: sway 5s ease-in-out infinite;
   --animate-sway-slow: sway 8s ease-in-out infinite;
-  --animate-ondel: ondel 2.6s ease-in-out infinite;
   --animate-bob: bob 1.3s ease-in-out infinite;
-  --animate-spin-slow: spin 6s linear infinite;
   --animate-float: float 6s ease-in-out infinite;
+  --animate-wiggle: wiggle 2.6s ease-in-out infinite;
   --animate-shimmer: shimmer 3.5s linear infinite;
   --animate-twinkle: twinkle 2.4s ease-in-out infinite;
 }
 
-/* Global so inline-style animations (SVG puppets, petals) can use them too. */
+/* Global so inline-style animations (SVG buddies, petals) can use them too. */
 @keyframes sway {
   0%, 100% { transform: rotate(-3deg); }
   50% { transform: rotate(3deg); }
 }
-@keyframes ondel {
-  0%, 100% { transform: rotate(-5deg); }
-  50% { transform: rotate(5deg); }
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-6deg); }
+  50% { transform: rotate(6deg); }
 }
 @keyframes bob {
   0%, 100% { transform: translateY(0); }
@@ -74,6 +79,14 @@
   0%, 100% { opacity: 0.25; transform: scale(0.8); }
   50% { opacity: 1; transform: scale(1.15); }
 }
+@keyframes wave-drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
 
 @layer base {
   html {
@@ -81,40 +94,48 @@
     -webkit-tap-highlight-color: transparent;
   }
   body {
-    @apply bg-cream font-sans text-emerald-950 antialiased;
+    @apply bg-milk font-sans text-matcha-950 antialiased;
     overflow-x: hidden;
   }
   ::selection {
-    @apply bg-gold-300 text-burgundy-900;
+    @apply bg-berry-200 text-berry-900;
   }
 }
 
 @layer components {
-  /* Subtle Islamic 8‑point star lattice. */
+  /* 8‑point star lattice, tinted per background. */
   .bg-islamic {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23c9a24a' stroke-opacity='.16' stroke-width='1'%3E%3Crect x='17' y='17' width='30' height='30'/%3E%3Crect x='17' y='17' width='30' height='30' transform='rotate(45 32 32)'/%3E%3Ccircle cx='32' cy='32' r='6'/%3E%3Cpath d='M0 0l17 17M64 0L47 17M0 64l17-17M64 64L47 47'/%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23ffc7d0' stroke-opacity='.13' stroke-width='1'%3E%3Crect x='17' y='17' width='30' height='30'/%3E%3Crect x='17' y='17' width='30' height='30' transform='rotate(45 32 32)'/%3E%3Ccircle cx='32' cy='32' r='6'/%3E%3Cpath d='M0 0l17 17M64 0L47 17M0 64l17-17M64 64L47 47'/%3E%3C/g%3E%3C/svg%3E");
     background-size: 64px 64px;
   }
-  .bg-islamic-dark {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23064e3b' stroke-opacity='.08' stroke-width='1'%3E%3Crect x='17' y='17' width='30' height='30'/%3E%3Crect x='17' y='17' width='30' height='30' transform='rotate(45 32 32)'/%3E%3Ccircle cx='32' cy='32' r='6'/%3E%3Cpath d='M0 0l17 17M64 0L47 17M0 64l17-17M64 64L47 47'/%3E%3C/g%3E%3C/svg%3E");
+  .bg-islamic-matcha {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%236f8f4a' stroke-opacity='.13' stroke-width='1'%3E%3Crect x='17' y='17' width='30' height='30'/%3E%3Crect x='17' y='17' width='30' height='30' transform='rotate(45 32 32)'/%3E%3Ccircle cx='32' cy='32' r='6'/%3E%3Cpath d='M0 0l17 17M64 0L47 17M0 64l17-17M64 64L47 47'/%3E%3C/g%3E%3C/svg%3E");
     background-size: 64px 64px;
   }
-  .text-gold-gradient {
-    background: linear-gradient(100deg, #a8822f 0%, #f3e7c4 25%, #c9a24a 50%, #f3e7c4 75%, #a8822f 100%);
+  .bg-islamic-berry {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23e8455f' stroke-opacity='.1' stroke-width='1'%3E%3Crect x='17' y='17' width='30' height='30'/%3E%3Crect x='17' y='17' width='30' height='30' transform='rotate(45 32 32)'/%3E%3Ccircle cx='32' cy='32' r='6'/%3E%3Cpath d='M0 0l17 17M64 0L47 17M0 64l17-17M64 64L47 47'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 64px 64px;
+  }
+  /* Strawberry-milk shimmer for names on dark matcha. */
+  .text-berry-gradient {
+    background: linear-gradient(100deg, #ff9cac 0%, #fff3f4 25%, #f76d83 50%, #fff3f4 75%, #ff9cac 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     animation: shimmer 6s linear infinite;
   }
-  .card-glass {
-    @apply rounded-3xl border border-gold-400/30 bg-white/70 shadow-[0_20px_50px_-20px_rgba(6,78,59,0.35)] backdrop-blur-md;
+  .card-soft {
+    @apply rounded-[1.75rem] border border-white/70 bg-white/75 shadow-[0_24px_60px_-28px_rgba(40,54,33,0.45)] backdrop-blur-md;
   }
-  .btn-gold {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-linear-to-r from-gold-600 via-gold-400 to-gold-600 px-6 py-3 text-sm font-medium tracking-wide text-emerald-950 shadow-lg shadow-gold-700/30 transition hover:brightness-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300;
+  .btn-berry {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-linear-to-b from-berry-400 to-berry-600 px-6 py-3 text-sm font-semibold tracking-wide text-milk shadow-lg shadow-berry-700/30 ring-1 ring-white/30 ring-inset transition hover:brightness-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-berry-300;
   }
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-current px-5 py-2.5 text-sm font-medium tracking-wide transition hover:bg-current/10 active:scale-95;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-current px-5 py-2.5 text-sm font-semibold tracking-wide transition hover:bg-current/10 active:scale-95;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em];
   }
 }
 

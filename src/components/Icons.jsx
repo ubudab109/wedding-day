@@ -35,4 +35,5 @@ export const IconHeart = make(<path d="M12 20s-7-4.4-9-9.2C1.6 7.3 3.8 4 7.2 4c2
 export const IconSpark = make(<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6" />);
 export const IconRing = make(<><circle cx="12" cy="15" r="6" /><path d="m9 4 3 4 3-4-1.5-1h-3z" /></>);
 export const IconMosque = make(<><path d="M4 21V12a8 8 0 0 1 16 0v9" /><path d="M12 4V2M2 21h20M10 21v-4a2 2 0 0 1 4 0v4" /></>);
-export const IconMusic = make(<><path d="M9 18V5l11-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="17" cy="16" r="3" /></>);
+export const IconInstagram = make(<><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".6" fill="currentColor" /></>);
+export const IconMusic =make(<><path d="M9 18V5l11-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="17" cy="16" r="3" /></>);

@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
-const COLORS = ['#c9a24a', '#f3e7c4', '#dcbf73', '#e9b7bd', '#b95564'];
+const COLORS = ['#e8455f', '#ff9cac', '#ffc7d0', '#8daa64', '#cddcb4', '#f6d27c'];
 const MAX_PARTICLES = 140;
 
-// Sparkle + petal trail that follows the pointer (and touch drags) on a single canvas.
+// 8-point-star sparkle + petal trail in strawberry & matcha that follows the pointer
+// (and touch drags) on a single canvas.
 export default function CursorTrail() {
   const canvasRef = useRef(null);
   const reduced = useReducedMotion();

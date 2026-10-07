@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useScroll, useSpring, useTransform, useVelocity } from 'framer-motion';
-import Ondel from './ornaments/Ondel';
+import Strawberry from './ornaments/Strawberry';
 
-// A tiny Ondel-ondel that wobbles with your scroll speed and chats in Betawi slang
+// A tiny strawberry that wobbles and squishes with your scroll speed and chats
 // whenever a new section (any element with `data-buddy="..."`) comes into view.
 export default function ScrollBuddy() {
   const { scrollY } = useScroll();
@@ -10,6 +10,9 @@ export default function ScrollBuddy() {
   const smooth = useSpring(velocity, { stiffness: 120, damping: 20 });
   const rotate = useTransform(smooth, [-2500, 0, 2500], [-22, 0, 22]);
   const lift = useTransform(smooth, [-2500, 0, 2500], [-18, 0, -18]);
+  // Squash & stretch: tall and thin when flung, round when resting.
+  const scaleY = useTransform(smooth, [-2500, 0, 2500], [1.18, 1, 1.18]);
+  const scaleX = useTransform(smooth, [-2500, 0, 2500], [0.86, 1, 0.86]);
 
   const [message, setMessage] = useState(null);
   const timer = useRef(0);
@@ -37,7 +40,7 @@ export default function ScrollBuddy() {
   }, []);
 
   return (
-    <div className="pointer-events-none fixed bottom-0 left-1 z-40 sm:left-4" aria-live="polite">
+    <div className="pointer-events-none fixed bottom-2 left-2 z-40 sm:bottom-4 sm:left-4" aria-live="polite">
       <AnimatePresence>
         {message && (
           <motion.div
@@ -46,14 +49,16 @@ export default function ScrollBuddy() {
             animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
             exit={{ opacity: 0, scale: 0.6, y: 10 }}
             transition={{ type: 'spring', stiffness: 380, damping: 18 }}
-            className="absolute bottom-[88%] left-10 w-max max-w-[11rem] origin-bottom-left rounded-2xl rounded-bl-none border border-gold-400/60 bg-ivory px-3 py-2 font-display text-sm font-semibold italic leading-snug text-burgundy-800 shadow-lg sm:left-14 sm:max-w-[14rem] sm:text-base"
+            className="absolute bottom-[92%] left-9 w-max max-w-[11rem] origin-bottom-left rounded-2xl rounded-bl-none border border-berry-200 bg-milk px-3 py-2 text-[13px] font-semibold leading-snug text-berry-700 shadow-lg shadow-berry-900/10 sm:left-12 sm:max-w-[14rem] sm:text-sm"
           >
             {message}
           </motion.div>
         )}
       </AnimatePresence>
-      <motion.div style={{ rotate, y: lift }} className="origin-bottom translate-y-[28%]">
-        <Ondel variant="pria" className="h-24 w-11 sm:h-32 sm:w-14" title="Ondel-ondel kecil" />
+      <motion.div style={{ rotate, y: lift, scaleX, scaleY }} className="origin-bottom">
+        <div className="animate-bob">
+          <Strawberry face className="h-14 w-12 drop-shadow-md sm:h-[4.5rem] sm:w-[3.75rem]" title="Stroberi kecil" />
+        </div>
       </motion.div>
     </div>
   );
