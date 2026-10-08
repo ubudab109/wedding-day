@@ -23,9 +23,11 @@ function ArchPortrait() {
           className="aspect-[3/4.4] w-full rounded-t-full"
         />
       </div>
-      <IslamicStar className="absolute -top-8 left-1/2 h-16 w-16 -translate-x-1/2 text-berry-200">
-        <span className="block h-3 w-3 rotate-45 rounded-[3px] bg-berry-300" />
-      </IslamicStar>
+      <div className="absolute -top-8 left-1/2 -translate-x-1/2">
+        <IslamicStar className="h-16 w-16 text-berry-200">
+          <span className="block h-3 w-3 rotate-45 rounded-[3px] bg-berry-300" />
+        </IslamicStar>
+      </div>
       <Blossom className="absolute -left-6 bottom-16 h-12 w-12 animate-float" />
       <PinkBlossom className="absolute -right-5 bottom-32 h-9 w-9 animate-float [animation-delay:1.4s]" />
       <Leaf className="absolute -left-8 bottom-6 h-6 w-10 -rotate-12 animate-sway" />
@@ -61,7 +63,7 @@ export default function Hero({ active }) {
             variants={popIn}
             lang="ar"
             dir="rtl"
-            className="font-calligraphy text-4xl leading-tight text-berry-200 sm:text-5xl lg:text-right"
+            className="font-calligraphy text-4xl leading-tight text-berry-200 sm:text-5xl lg:text-left"
             aria-label="Bismillahirrahmanirrahim"
           >
             بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ

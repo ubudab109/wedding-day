@@ -1,6 +1,6 @@
 # The Wedding of Rizky & Lanina
 
-Betawi × Islamic wedding invitation built with **React 18 + Vite + Tailwind CSS v4 + Framer Motion**, ready for **Vercel**.
+Strawberry & Matcha × Islamic wedding invitation built with **React 18 + Vite + Tailwind CSS v4 + Framer Motion**, ready for **Vercel**.
 
 ## Run locally
 
@@ -16,6 +16,13 @@ The guest's name comes from the `to` query parameter. Use `+` (or `%20`) for spa
 
 ```
 https://your-domain.vercel.app/?to=Bapak+Budi+Dan+Keluarga
+```
+
+Add `from=mertua` to show **only** the parents' bank account (BCA · Mulyani) in Wedding Gift instead of the
+couple's. `?from="mertua"` (quoted) works too. The accounts per key live in `giftsByFrom` in the config.
+
+```
+https://your-domain.vercel.app/?to=Bapak+Budi&from=mertua
 ```
 
 ## Editing content
@@ -38,6 +45,7 @@ generated music-box melody plays instead.
 | --- | --- |
 | Opening photo (cover) | `public/images/couple_opening.jpeg` |
 | Groom / bride portraits | `public/images/rizky.jpeg`, `public/images/indah.jpeg` |
+| Cover sticker (AI: the couple as little kids) | `public/images/child.png` — any white-canvas die-cut sticker; the white is removed and it's trimmed automatically |
 | Gallery | every `.jpeg` in `public/galleries/` (sorted 1, 2, … 10) |
 
 Just drop photos in those folders. `plugins/photos.js` auto-rotates them (EXIF), creates 640px/1280px WebP versions
@@ -66,18 +74,20 @@ Or push to GitHub and import the repo at vercel.com/new. The framework preset is
 | Feature | Where |
 | --- | --- |
 | Cover: opening photo → fades behind names + button → doors split the photo open | `components/sections/Cover.jsx` |
-| Hero, Bismillah, QS. Ar-Rum 21 | `components/sections/Hero.jsx` |
-| Live countdown + Google Calendar link | `components/sections/Countdown.jsx` |
-| About us with arched portrait reveal | `components/sections/AboutUs.jsx` |
-| Our Galleries: masonry reveal + swipeable lightbox | `components/sections/Gallery.jsx` |
-| Love-story timeline (fills as you scroll) | `components/sections/LoveStory.jsx` |
+| Hero: Bismillah, names, mihrab-arch photo, QS. Ar-Rum 21 | `components/sections/Hero.jsx` |
+| Live countdown (strawberry / matcha tiles) + Google Calendar link | `components/sections/Countdown.jsx` |
+| About us with arched portrait reveal + Instagram links | `components/sections/AboutUs.jsx` |
+| Our Galleries: polaroid masonry reveal + swipeable lightbox | `components/sections/Gallery.jsx` |
+| Love-story timeline (fills as you scroll, a strawberry rides the tip) | `components/sections/LoveStory.jsx` |
 | Schedule + Google Maps (Taman Tapawira) | `components/sections/Schedule.jsx` |
 | Wedding gift: BCA cards + gift address, with copy buttons | `components/sections/Gift.jsx` |
 | Guest book + RSVP | `components/sections/GuestBook.jsx`, `api/guestbook.js` |
-| Animated Ondel-ondel (SVG) | `components/ornaments/Ondel.jsx` |
-| Scroll buddy: Ondel that wobbles with scroll speed and talks Betawi | `components/ScrollBuddy.jsx` |
-| Gigi balang border, 8-point star, melati & rose flowers | `components/ornaments/*` |
-| Falling petals, cursor sparkle trail | `FallingPetals.jsx`, `CursorTrail.jsx` |
+| Scroll buddy: a strawberry that squishes with scroll speed and chats per section | `components/ScrollBuddy.jsx` |
+| Strawberry, blossoms, matcha leaves, 8-point star, drifting "latte layer" waves | `components/ornaments/*` |
+| Falling petals & leaves, cursor sparkle trail | `FallingPetals.jsx`, `CursorTrail.jsx` |
 | Music disc + back-to-top (hide on scroll down, show on scroll up) | `FloatingControls.jsx` |
+
+Colours (`milk`, `matcha-*`, `berry-*`, `seed`) and fonts live in the `@theme` block of
+[`src/index.css`](src/index.css).
 
 All decorative motion respects `prefers-reduced-motion`.

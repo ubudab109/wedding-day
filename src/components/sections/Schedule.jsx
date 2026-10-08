@@ -35,15 +35,17 @@ export default function Schedule() {
               key={ev.title}
               variants={popIn}
               whileHover={{ y: -6 }}
-              className={`relative overflow-hidden rounded-t-[10rem] rounded-b-[2rem] bg-linear-to-b px-6 pb-9 pt-16 text-center text-milk shadow-2xl ${
+              className={`relative mx-auto w-full max-w-sm overflow-hidden rounded-t-[10rem] rounded-b-[2rem] bg-linear-to-b px-6 pb-9 pt-20 text-center text-milk shadow-2xl ${
                 i % 2 ? 'from-matcha-500 to-matcha-800 shadow-matcha-900/30' : 'from-berry-400 to-berry-700 shadow-berry-800/30'
               }`}
             >
               <div className="pointer-events-none absolute inset-2.5 rounded-t-[10rem] rounded-b-[1.6rem] border border-white/30" />
               <div className="pointer-events-none absolute inset-0 bg-islamic opacity-60" />
-              <IslamicStar className="absolute left-1/2 top-4 h-10 w-10 -translate-x-1/2 text-white/60">
-                <span className="block h-1.5 w-1.5 rounded-full bg-white/80" />
-              </IslamicStar>
+              <div className="absolute left-1/2 top-5 -translate-x-1/2">
+                <IslamicStar className="h-10 w-10 text-white/60">
+                  <span className="block h-1.5 w-1.5 rounded-full bg-white/80" />
+                </IslamicStar>
+              </div>
               <p lang="ar" dir="rtl" className="relative font-calligraphy text-3xl text-white/90">
                 {ev.arabic}
               </p>

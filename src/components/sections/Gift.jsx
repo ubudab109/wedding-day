@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { wedding } from '../../config/wedding';
+import { useGiftAccounts } from '../../hooks/useGiftAccounts';
 import { groupDigits } from '../../lib/format';
 import { popIn, slideFrom, viewport } from '../../lib/motion';
 import SectionTitle from '../SectionTitle';
@@ -100,6 +101,7 @@ function BankCard({ gift, index }) {
 }
 
 export default function Gift() {
+  const accounts = useGiftAccounts();
   return (
     <section
       id="hadiah"
@@ -114,7 +116,7 @@ export default function Gift() {
           kasih, Anda dapat mengirimkannya melalui rekening atau alamat berikut.
         </p>
         <div className="mx-auto flex max-w-4xl flex-col items-center justify-center gap-6 md:flex-row">
-          {wedding.gifts.map((g, i) => (
+          {accounts.map((g, i) => (
             <BankCard key={g.number} gift={g} index={i} />
           ))}
         </div>

@@ -96,10 +96,22 @@ export const wedding = {
   // Keys match file names in public/images (optimized at build time).
   photos: { opening: 'couple_opening', groom: 'rizky', bride: 'indah' },
 
+  // AI-generated sticker of the couple drawn as little kids, shown on the cover.
+  child: {
+    sticker: 'child',
+    alt: 'Ilustrasi AI Rizky dan Indah sebagai anak kecil, saling berpelukan',
+    caption: '',
+  },
+
   gifts: [
     { bank: 'BCA', bankName: 'Bank Central Asia', holder: 'Muhammad Rizky Firdaus', number: '5855141016' },
     { bank: 'BCA', bankName: 'Bank Central Asia', holder: 'Lanina Indah Setyani', number: '5855141580' },
   ],
+
+  // Replaces `gifts` entirely when the link carries `?from=<key>` (e.g. `?from=mertua`).
+  giftsByFrom: {
+    mertua: [{ bank: 'BCA', bankName: 'Bank Central Asia', holder: 'Mulyani', number: '5540870286' }],
+  },
 
   music: {
     // If the file is missing, a soft generated ambient melody plays instead.

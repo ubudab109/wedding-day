@@ -24,6 +24,7 @@ Create website landing for wedding invitation with Strawberry & Matcha colors. I
 - animation disk on the right bottom and button to top of the website and it will disappear when the user scroll down and reappear when the user scroll to top
 - add cursor trail animation
 - add some animation with showing photo first `public\images\couple_opening.jpeg` then it will fade into the background while the button `Buka Undangan` and name of the couple showing
+- Add another image from `public\images\child.png`. Make sure put the image in fit, align, better, good positiion. This image are child AI Image generated from couple. Make sure you put the image with correct context
 
 
 ## Hero
@@ -66,3 +67,4 @@ Create website landing for wedding invitation with Strawberry & Matcha colors. I
 - Account Bank Central Asia (BCA) with name: Muhammad Rizky Firdaus 5855141016
 - Account Bank Central Asia (BCA) with name: Lanina Indah Setyani 5855141580
 - Add address for gift: Jl. Ampera II Gang Haji Nata Sirin RT004/RW09 No. 28B, Kelurahan Ragunan, Kecamatan Pasar Minggu, Jakarta Selatan 12550
+- Add additional param `?from="mertua"`, if this param are sent. Then the account bank must only use this. Account Bank Central Asia (BCA) with name: Mulyani 5540870286

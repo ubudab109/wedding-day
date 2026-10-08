@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { images } from 'virtual:photos';
+import { images, stickers } from 'virtual:photos';
 import { wedding } from '../../config/wedding';
 import { IconMail } from '../Icons';
 import IslamicStar from '../ornaments/IslamicStar';
@@ -12,6 +12,7 @@ const PHOTO_HOLD_MS = 2400; // how long the photo is shown on its own
 const PHOTO_MAX_WAIT_MS = 4500; // start the intro even if the photo is slow to load
 
 const photo = images[wedding.photos.opening];
+const child = stickers[wedding.child.sticker];
 
 // One half of the gate. Each half carries its half of the photo, so the picture
 // splits down the middle when the doors open.
@@ -132,32 +133,62 @@ export default function Cover({ guest, onOpen, onDone }) {
           The Wedding of
         </motion.p>
 
-        <motion.div
-          variants={{
-            hidden: { scale: 0, rotate: -90, opacity: 0 },
-            show: { scale: 1, rotate: 0, opacity: 1, transition: { type: 'spring', stiffness: 120, damping: 12, delay: 0.2 } },
-          }}
-          className="relative"
-        >
-          <IslamicStar className="my-5 h-28 w-28 text-berry-300 sm:h-36 sm:w-36">
-            <span className="font-script text-4xl text-berry-200 sm:text-5xl">
-              {groom.nickname[0]}
-              <span className="mx-0.5 text-2xl text-matcha-200">&amp;</span>
-              {bride.nickname[0]}
-            </span>
-          </IslamicStar>
-          {/* A strawberry orbiting the monogram */}
-          <motion.div
-            aria-hidden="true"
-            className="absolute inset-0"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 14, repeat: Infinity, ease: 'linear' }}
+        {child ? (
+          <motion.figure
+            variants={{
+              hidden: { scale: 0.3, y: 40, opacity: 0 },
+              show: { scale: 1, y: 0, opacity: 1, transition: { type: 'spring', stiffness: 140, damping: 11, delay: 0.2 } },
+            }}
+            className="relative my-4 flex flex-col items-center [@media(max-height:700px)]:my-2"
           >
-            <Strawberry className="absolute -top-1 left-1/2 h-7 w-6 -translate-x-1/2" />
+            {/* 8-point star halo behind the little ones */}
+            <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[58%]">
+              <IslamicStar className="h-44 w-44 text-berry-300/60 sm:h-56 sm:w-56 [@media(max-height:700px)]:h-32 [@media(max-height:700px)]:w-32" />
+            </div>
+            <div className="pointer-events-none absolute left-1/2 top-[42%] h-36 w-36 -translate-x-1/2 -translate-y-1/2 rounded-full bg-berry-400/25 blur-2xl sm:h-44 sm:w-44" />
+            {/* A strawberry orbiting the pair, passing behind them and the caption */}
+            <motion.div
+              aria-hidden="true"
+              className="absolute left-1/2 top-[45%] h-40 w-40 -translate-x-1/2 -translate-y-1/2 sm:h-52 sm:w-52"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 14, repeat: Infinity, ease: 'linear' }}
+            >
+              <Strawberry className="absolute -top-1 left-1/2 h-7 w-6 -translate-x-1/2" />
+            </motion.div>
+            <motion.img
+              src={child.src}
+              srcSet={child.srcSet}
+              sizes="(min-width: 640px) 15rem, 11.5rem"
+              width={child.width}
+              height={child.height}
+              alt={wedding.child.alt}
+              draggable={false}
+              animate={stage === 'intro' ? { rotate: [-2, 2, -2] } : { rotate: 0 }}
+              transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
+              className="relative h-auto w-[11.5rem] drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)] sm:w-60 [@media(max-height:700px)]:w-32"
+            />
+            <figcaption className="relative -mt-1 rounded-full bg-milk px-3 py-0.5 font-script text-lg leading-snug text-berry-600 shadow-md sm:text-xl">
+              {wedding.child.caption}
+            </figcaption>
+          </motion.figure>
+        ) : (
+          <motion.div
+            variants={{
+              hidden: { scale: 0, rotate: -90, opacity: 0 },
+              show: { scale: 1, rotate: 0, opacity: 1, transition: { type: 'spring', stiffness: 120, damping: 12, delay: 0.2 } },
+            }}
+          >
+            <IslamicStar className="my-5 h-28 w-28 text-berry-300 sm:h-36 sm:w-36">
+              <span className="font-script text-4xl text-berry-200 sm:text-5xl">
+                {groom.nickname[0]}
+                <span className="mx-0.5 text-2xl text-matcha-200">&amp;</span>
+                {bride.nickname[0]}
+              </span>
+            </IslamicStar>
           </motion.div>
-        </motion.div>
+        )}
 
-        <motion.h1 variants={item(0.35)} className="font-script text-6xl leading-none text-berry-gradient sm:text-7xl">
+        <motion.h1 variants={item(0.35)} className="font-script text-6xl leading-none text-berry-gradient sm:text-7xl [@media(max-height:700px)]:text-5xl">
           {groom.nickname} <span className="text-5xl">&amp;</span> {bride.nickname}
         </motion.h1>
         <motion.p variants={item(0.5)} className="mt-4 font-display text-lg tracking-[0.3em] text-matcha-100">
@@ -166,7 +197,7 @@ export default function Cover({ guest, onOpen, onDone }) {
 
         <motion.div
           variants={item(0.7)}
-          className="mt-8 w-full max-w-xs rounded-[1.75rem] border border-white/15 bg-white/10 px-5 py-4 shadow-2xl shadow-matcha-950/40 backdrop-blur-md"
+          className="mt-8 w-full max-w-xs rounded-[1.75rem] border border-white/15 [@media(max-height:700px)]:mt-5 [@media(max-height:700px)]:py-3 bg-white/10 px-5 py-4 shadow-2xl shadow-matcha-950/40 backdrop-blur-md"
         >
           <p className="text-xs text-milk/75">Kepada Yth. Bapak/Ibu/Saudara/i</p>
           <p className="mt-1 break-words font-display text-2xl font-semibold text-berry-100">{guest}</p>
@@ -178,7 +209,7 @@ export default function Cover({ guest, onOpen, onDone }) {
             hidden: { opacity: 0, scale: 0.6 },
             show: { opacity: 1, scale: 1, transition: { type: 'spring', stiffness: 200, damping: 12, delay: 0.95 } },
           }}
-          className="relative z-10 mt-7"
+          className="relative z-10 mt-7 [@media(max-height:700px)]:mt-4"
         >
           <motion.button
             type="button"
