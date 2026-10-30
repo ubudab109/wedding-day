@@ -76,14 +76,15 @@ export default function GuestBook({ guest }) {
     >
       <SectionTitle arabic="دُعَاء" eyebrow="Buku Tamu" title="Doa & Ucapan" />
 
-      <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[1fr_1.15fr]">
+      {/* grid-cols-1 = minmax(0, 1fr): an auto column would grow to fit a long wish and overflow on phones. */}
+      <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 lg:grid-cols-[1fr_1.15fr]">
         <motion.form
           variants={fadeUp}
           initial="hidden"
           whileInView="show"
           viewport={viewport}
           onSubmit={onSubmit}
-          className="card-soft h-fit space-y-5 p-6 sm:p-8"
+          className="card-soft h-fit min-w-0 space-y-5 p-6 sm:p-8"
           noValidate
         >
           <div>
@@ -176,7 +177,7 @@ export default function GuestBook({ guest }) {
           </AnimatePresence>
         </motion.form>
 
-        <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={viewport}>
+        <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={viewport} className="min-w-0">
           <div className="mb-4 grid grid-cols-3 gap-2">
             {stats.map((s) => (
               <div key={s.value} className="rounded-2xl bg-linear-to-b from-matcha-500 to-matcha-700 px-2 py-3 text-center text-milk shadow-md shadow-matcha-900/20">
@@ -214,12 +215,12 @@ export default function GuestBook({ guest }) {
                       </span>
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
-                          <p className="truncate font-semibold text-matcha-800">{w.name}</p>
+                          <p className="min-w-0 max-w-full truncate font-semibold text-matcha-800">{w.name}</p>
                           <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${BADGE[w.attendance] ?? BADGE.ragu}`}>
                             {ATTENDANCE.find((a) => a.value === w.attendance)?.label ?? 'Masih Ragu'}
                           </span>
                         </div>
-                        <p className="mt-1 whitespace-pre-line break-words text-sm leading-relaxed text-matcha-900/80">
+                        <p className="mt-1 whitespace-pre-line wrap-anywhere text-sm leading-relaxed text-matcha-900/80">
                           {w.message}
                         </p>
                         <p className="mt-1.5 text-[11px] text-matcha-900/50">{timeAgo(w.createdAt)}</p>
