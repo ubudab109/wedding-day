@@ -8,6 +8,7 @@ const LIST_KEY = 'wedding:guestbook';
 const MAX_ITEMS = 500;
 const RATE_LIMIT = 5; // posts per minute per IP
 const ATTENDANCE = new Set(['hadir', 'tidak', 'ragu']);
+const EARLIEST_WISH = Date.UTC(2026, 0, 1);
 
 async function redis(commands) {
   const res = await fetch(`${URL_}/pipeline`, {
@@ -46,7 +47,9 @@ export default async function handler(req, res) {
           return null;
         }
       });
-      return res.status(200).json({ items: items.filter(Boolean) });
+      // Newest first by time: recovered wishes are pushed late but keep their original time.
+      const sorted = items.filter(Boolean).sort((a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0));
+      return res.status(200).json({ items: sorted });
     }
 
     if (req.method === 'POST') {
@@ -66,7 +69,11 @@ export default async function handler(req, res) {
         return res.status(429).json({ error: 'Terlalu banyak ucapan, coba lagi sebentar ya' });
       }
 
-      const item = { id: crypto.randomUUID(), name, message, attendance, createdAt: Date.now() };
+      // Wishes recovered from a guest's device keep their original time (if it's plausible).
+      const now = Date.now();
+      const sentAt = Number(body.createdAt);
+      const createdAt = sentAt >= EARLIEST_WISH && sentAt <= now ? sentAt : now;
+      const item = { id: crypto.randomUUID(), name, message, attendance, createdAt };
       await redis([
         ['LPUSH', LIST_KEY, JSON.stringify(item)],
         ['LTRIM', LIST_KEY, '0', String(MAX_ITEMS - 1)],

@@ -25,15 +25,17 @@ export default function GuestBook({ guest }) {
   const [wishes, setWishes] = useState([]);
   const [remote, setRemote] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
   const [status, setStatus] = useState({ type: 'idle', text: '' });
   const [shown, setShown] = useState(PAGE);
 
   useEffect(() => {
     let alive = true;
-    fetchWishes().then(({ items, remote: r }) => {
+    fetchWishes().then(({ items, remote: r, failed: f }) => {
       if (!alive) return;
       setWishes(items);
       setRemote(r);
+      setFailed(f);
       setLoading(false);
     });
     return () => {
@@ -58,6 +60,7 @@ export default function GuestBook({ guest }) {
     try {
       const item = await postWish({ name, message, attendance: form.attendance }, remote);
       setWishes((w) => [item, ...w]);
+      setFailed(false);
       setForm((f) => ({ ...f, message: '' }));
       setStatus({ type: 'success', text: 'Terima kasih atas doa & ucapannya! 🤲' });
     } catch (err) {
@@ -188,6 +191,10 @@ export default function GuestBook({ guest }) {
           <div className="card-soft max-h-[34rem] overflow-y-auto p-4 sm:p-5">
             {loading ? (
               <p className="py-10 text-center text-sm text-matcha-900/60">Memuat ucapan…</p>
+            ) : failed && wishes.length === 0 ? (
+              <p role="alert" className="py-10 text-center text-sm text-berry-600">
+                Ucapan belum bisa dimuat saat ini. Silakan muat ulang halaman sebentar lagi.
+              </p>
             ) : wishes.length === 0 ? (
               <p className="py-10 text-center font-display text-lg italic text-matcha-900/70">
                 Belum ada ucapan. Jadilah yang pertama mendoakan kami 🤍
