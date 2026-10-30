@@ -167,9 +167,11 @@ export default function Cover({ guest, onOpen, onDone }) {
               transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
               className="relative h-auto w-[11.5rem] drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)] sm:w-60 [@media(max-height:700px)]:w-32"
             />
-            <figcaption className="relative -mt-1 rounded-full bg-milk px-3 py-0.5 font-script text-lg leading-snug text-berry-600 shadow-md sm:text-xl">
-              {wedding.child.caption}
-            </figcaption>
+            {wedding.child.caption && (
+              <figcaption className="relative -mt-1 rounded-full bg-milk px-3 py-0.5 font-script text-lg leading-snug text-berry-600 shadow-md sm:text-xl">
+                {wedding.child.caption}
+              </figcaption>
+            )}
           </motion.figure>
         ) : (
           <motion.div

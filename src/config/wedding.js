@@ -94,7 +94,7 @@ export const wedding = {
     'Jl. Ampera II Gang Haji Nata Sirin RT004/RW09 No. 28B, Kelurahan Ragunan, Kecamatan Pasar Minggu, Jakarta Selatan 12550',
 
   // Keys match file names in public/images (optimized at build time).
-  photos: { opening: 'couple_opening', groom: 'rizky', bride: 'indah' },
+  photos: { opening: 'couples', groom: 'rizky', bride: 'indah' },
 
   // AI-generated sticker of the couple drawn as little kids, shown on the cover.
   child: {

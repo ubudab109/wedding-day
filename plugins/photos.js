@@ -1,4 +1,4 @@
-// Vite plugin: turns the large camera JPEGs in public/images and public/galleries into
+// Vite plugin: turns the large camera JPEGs/PNGs in public/images and public/galleries into
 // web-sized WebP variants (+ tiny blur placeholders) and exposes them as `virtual:photos`.
 // Originals stay as the source of truth; they are stripped from the production bundle.
 
@@ -12,9 +12,12 @@ const OUT_DIR = 'optimized';
 const VIRTUAL_ID = 'virtual:photos';
 const RESOLVED_ID = `\0${VIRTUAL_ID}`;
 const STICKER_WIDTHS = [480, 960];
-const isJpeg = (f) => /\.jpe?g$/i.test(f);
-// PNGs in public/images are die-cut stickers on a white canvas (e.g. child.png).
-const isSticker = (folder, f) => folder === 'images' && /\.png$/i.test(f);
+const isImage = (f) => /\.(jpe?g|png)$/i.test(f);
+// Stickers are opt-in by name (the `stickers` option): die-cut images on a white canvas,
+// like child.png. Every other image is a regular photo, whatever its extension.
+const isSticker = (stickerNames, folder, f) =>
+  folder === 'images' && isImage(f) && stickerNames.includes(path.parse(f).name);
+const isPhoto = (stickerNames, folder, f) => isImage(f) && !isSticker(stickerNames, folder, f);
 const naturalSort = (a, b) => a.localeCompare(b, undefined, { numeric: true });
 
 async function isFresh(src, out) {
@@ -133,7 +136,7 @@ async function processSticker(publicDir, folder, file) {
   };
 }
 
-async function buildManifest(publicDir) {
+async function buildManifest(publicDir, stickerNames) {
   const manifest = {};
   const stickers = [];
   for (const folder of SOURCES) {
@@ -143,8 +146,10 @@ async function buildManifest(publicDir) {
     } catch {
       /* folder missing — empty list */
     }
-    manifest[folder] = await Promise.all(files.filter(isJpeg).map((f) => processPhoto(publicDir, folder, f)));
-    stickers.push(...(await Promise.all(files.filter((f) => isSticker(folder, f)).map((f) => processSticker(publicDir, folder, f)))));
+    const photosIn = files.filter((f) => isPhoto(stickerNames, folder, f));
+    const stickersIn = files.filter((f) => isSticker(stickerNames, folder, f));
+    manifest[folder] = await Promise.all(photosIn.map((f) => processPhoto(publicDir, folder, f)));
+    stickers.push(...(await Promise.all(stickersIn.map((f) => processSticker(publicDir, folder, f)))));
   }
   return {
     images: Object.fromEntries(manifest.images.map((p) => [p.name, p])),
@@ -153,7 +158,7 @@ async function buildManifest(publicDir) {
   };
 }
 
-export default function photos() {
+export default function photos({ stickers: stickerNames = [] } = {}) {
   let publicDir;
   let outDir;
   let manifest;
@@ -167,7 +172,7 @@ export default function photos() {
       isBuild = config.command === 'build';
     },
     async buildStart() {
-      manifest = await buildManifest(publicDir);
+      manifest = await buildManifest(publicDir, stickerNames);
     },
     resolveId(id) {
       return id === VIRTUAL_ID ? RESOLVED_ID : null;
@@ -184,8 +189,8 @@ export default function photos() {
       // Re-scan when photos are added/removed during `npm run dev`.
       const watched = SOURCES.map((f) => path.join(publicDir, f));
       const refresh = async (file) => {
-        if (!/\.(jpe?g|png)$/i.test(file) || !watched.some((dir) => file.startsWith(dir))) return;
-        manifest = await buildManifest(publicDir);
+        if (!isImage(file) || !watched.some((dir) => file.startsWith(dir))) return;
+        manifest = await buildManifest(publicDir, stickerNames);
         const mod = server.moduleGraph.getModuleById(RESOLVED_ID);
         if (mod) server.moduleGraph.invalidateModule(mod);
         server.ws.send({ type: 'full-reload' });
@@ -200,7 +205,7 @@ export default function photos() {
       for (const folder of SOURCES) {
         const dir = path.join(outDir, folder);
         const files = await fs.readdir(dir).catch(() => []);
-        const originals = files.filter((f) => isJpeg(f) || isSticker(folder, f));
+        const originals = files.filter(isImage);
         await Promise.all(originals.map((f) => fs.unlink(path.join(dir, f))));
         await fs.rmdir(dir).catch(() => {});
       }
