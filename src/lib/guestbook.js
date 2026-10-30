@@ -1,105 +1,119 @@
-// Guest book client: talks to the Vercel serverless API (/api/guestbook).
+// Guest book client — every wish is stored in the Amplify Data backend (amplify/data/resource.ts),
+// so all guests on all devices see the same list. Nothing is ever kept only on the guest's device.
 //
-// In local dev (no API), wishes fall back to localStorage. In production a failed
-// save is reported to the guest instead of being silently kept on their device —
-// and any wishes an older version of the site did keep locally are uploaded the
-// next time that guest opens the invitation (see `syncPending`).
+// amplify_outputs.json is written by the Amplify build (`ampx pipeline-deploy`) or locally by
+// `npx ampx sandbox`. Without it the guest book reports itself unavailable instead of pretending.
 
-const LOCAL_KEY = 'wedding-guestbook';
-const DEV = Boolean(import.meta.env?.DEV);
+import { Amplify } from 'aws-amplify';
+import { generateClient } from 'aws-amplify/data';
 
-const readLocal = () => {
+const outputs = Object.values(import.meta.glob('../../amplify_outputs.json', { eager: true, import: 'default' }))[0];
+let client = null;
+if (outputs) {
+  Amplify.configure(outputs);
+  client = generateClient();
+}
+
+// An older version of the site saved wishes here when it had no server; they get uploaded once.
+const LEGACY_KEY = 'wedding-guestbook';
+const ATTENDANCE = new Set(['hadir', 'ragu', 'tidak']);
+const UNAVAILABLE = 'Maaf, ucapan belum terkirim karena gangguan server. Silakan coba lagi sebentar lagi.';
+
+const clean = (value, max) => String(value ?? '').replace(/\s+/g, ' ').trim().slice(0, max);
+
+const toWish = (w) => ({
+  id: w.id,
+  name: w.name,
+  message: w.message,
+  attendance: w.attendance ?? 'ragu',
+  createdAt: Date.parse(w.sentAt ?? w.createdAt),
+});
+
+function assertOk({ data, errors }) {
+  if (errors?.length) throw new Error(errors[0].message);
+  return data;
+}
+
+async function create({ name, message, attendance, createdAt }) {
+  const data = assertOk(
+    await client.models.Wish.create({
+      name,
+      message,
+      attendance: ATTENDANCE.has(attendance) ? attendance : 'ragu',
+      sentAt: createdAt ? new Date(createdAt).toISOString() : undefined,
+    }),
+  );
+  if (!data) throw new Error('Wish was not saved');
+  return toWish(data);
+}
+
+async function listAll() {
+  const items = [];
+  let nextToken;
+  do {
+    const page = await client.models.Wish.list({ limit: 1000, nextToken });
+    items.push(...assertOk(page));
+    nextToken = page.nextToken;
+  } while (nextToken);
+  return items.map(toWish).sort((a, b) => b.createdAt - a.createdAt);
+}
+
+const readLegacy = () => {
   try {
-    return JSON.parse(localStorage.getItem(LOCAL_KEY)) ?? [];
+    return JSON.parse(localStorage.getItem(LEGACY_KEY)) ?? [];
   } catch {
     return [];
   }
 };
 
-const writeLocal = (items) => {
+const writeLegacy = (items) => {
   try {
-    if (items.length) localStorage.setItem(LOCAL_KEY, JSON.stringify(items.slice(0, 200)));
-    else localStorage.removeItem(LOCAL_KEY);
+    if (items.length) localStorage.setItem(LEGACY_KEY, JSON.stringify(items));
+    else localStorage.removeItem(LEGACY_KEY);
   } catch {
-    /* storage full or blocked — ignore */
+    /* storage blocked — nothing to recover then */
   }
 };
 
-class ApiError extends Error {
-  constructor(status, message) {
-    super(message);
-    this.status = status;
-  }
-}
-
-async function api(method, body) {
-  const res = await fetch('/api/guestbook', {
-    method,
-    headers: body ? { 'Content-Type': 'application/json' } : undefined,
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  const isJson = res.headers.get('content-type')?.includes('application/json');
-  const data = isJson ? await res.json() : null;
-  if (!res.ok || !data) throw new ApiError(res.status, data?.error ?? 'Guest book unavailable');
-  return data;
-}
-
-// Uploads wishes that were only ever saved on this device. Each one that the server
-// accepts (or rejects as invalid) is removed locally; anything else is kept for next time.
-async function syncPending() {
-  const pending = readLocal();
-  if (!pending.length) return [];
-  const uploaded = [];
+// Uploads wishes stranded on this device by the old site, keeping their original time.
+// Uploaded (or unusable) ones are removed; anything that fails is kept for the next visit.
+async function syncLegacy() {
+  const pending = readLegacy();
+  if (!pending.length) return;
   const left = [];
-  for (let i = 0; i < pending.length; i += 1) {
-    const w = pending[i];
+  for (const w of pending) {
+    const name = clean(w.name, 60);
+    const message = clean(w.message, 500);
+    if (name.length < 2 || message.length < 2) continue;
     try {
-      const { item } = await api('POST', {
-        name: w.name,
-        message: w.message,
-        attendance: w.attendance,
-        createdAt: w.createdAt,
-      });
-      uploaded.push(item);
-    } catch (err) {
-      if (err.status === 400) continue; // invalid — drop it rather than retry forever
-      left.push(...pending.slice(i)); // rate-limited or offline — retry on the next visit
-      break;
+      await create({ name, message, attendance: w.attendance, createdAt: w.createdAt });
+    } catch {
+      left.push(w);
     }
   }
-  writeLocal(left);
-  return uploaded;
+  writeLegacy(left);
 }
 
-// `remote` is false only in local dev without the API. `failed` means the server
-// could not be reached in production: the list is empty and posting should be retried.
 export async function fetchWishes() {
+  if (!client) return { items: [], failed: true };
   try {
-    await syncPending().catch(() => {});
-    const { items } = await api('GET');
-    return { items, remote: true, failed: false };
-  } catch {
-    if (DEV) return { items: readLocal(), remote: false, failed: false };
-    return { items: [], remote: true, failed: true };
+    await syncLegacy().catch(() => {});
+    return { items: await listAll(), failed: false };
+  } catch (err) {
+    console.error('[guestbook]', err);
+    return { items: [], failed: true };
   }
 }
 
-export async function postWish(wish, remote) {
-  if (remote || !DEV) {
-    try {
-      const { item } = await api('POST', wish);
-      return item;
-    } catch (err) {
-      if (err.status === 400 || err.status === 429 || !DEV) {
-        throw new Error(
-          err.status === 400 || err.status === 429
-            ? err.message
-            : 'Maaf, ucapan belum terkirim karena gangguan server. Silakan coba lagi sebentar lagi.',
-        );
-      }
-    }
+export async function postWish(wish) {
+  const name = clean(wish.name, 60);
+  const message = clean(wish.message, 500);
+  if (name.length < 2 || message.length < 2) throw new Error('Mohon isi nama dan ucapan terlebih dahulu.');
+  if (!client) throw new Error(UNAVAILABLE);
+  try {
+    return await create({ name, message, attendance: wish.attendance });
+  } catch (err) {
+    console.error('[guestbook]', err);
+    throw new Error(UNAVAILABLE);
   }
-  const item = { ...wish, id: crypto.randomUUID?.() ?? String(Date.now()), createdAt: Date.now() };
-  writeLocal([item, ...readLocal()]);
-  return item;
 }

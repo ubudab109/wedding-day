@@ -23,7 +23,6 @@ export default function GuestBook({ guest }) {
   const defaultName = guest === 'Tamu Undangan' ? '' : guest;
   const [form, setForm] = useState({ name: defaultName, message: '', attendance: 'hadir' });
   const [wishes, setWishes] = useState([]);
-  const [remote, setRemote] = useState(false);
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
   const [status, setStatus] = useState({ type: 'idle', text: '' });
@@ -31,10 +30,9 @@ export default function GuestBook({ guest }) {
 
   useEffect(() => {
     let alive = true;
-    fetchWishes().then(({ items, remote: r, failed: f }) => {
+    fetchWishes().then(({ items, failed: f }) => {
       if (!alive) return;
       setWishes(items);
-      setRemote(r);
       setFailed(f);
       setLoading(false);
     });
@@ -58,7 +56,7 @@ export default function GuestBook({ guest }) {
     }
     setStatus({ type: 'loading', text: '' });
     try {
-      const item = await postWish({ name, message, attendance: form.attendance }, remote);
+      const item = await postWish({ name, message, attendance: form.attendance });
       setWishes((w) => [item, ...w]);
       setFailed(false);
       setForm((f) => ({ ...f, message: '' }));

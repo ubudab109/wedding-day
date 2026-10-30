@@ -2,5 +2,8 @@ node_modules
 dist
 .vercel
 .env*
-!.env.example
 public/optimized
+
+# Amplify Gen 2 (generated per environment)
+.amplify
+amplify_outputs*
